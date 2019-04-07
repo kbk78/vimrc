@@ -11,23 +11,26 @@ set guioptions-=r  "remove right-hand scroll bar
 set guioptions-=L  "remove left-hand scroll bar
 set guifont=Hack
 
-"set rtp+=C:\ProgramData\chocolatey\lib\fzf\tools
 
-inoremap {} {}<Left>
-inoremap () ()<Left>
-inoremap [] []<Left>
-inoremap '' ''<Left>
-inoremap "" ""<Left>
 inoremap kj <Esc>
 
 nnoremap <C-J> <C-F>
 nnoremap <C-K> <C-B>
 
-vnoremap ,c :s/^/#<CR> /#<CR>
+vnoremap ,c :s/^/#<CR>
 vnoremap ,x :s/^#//<CR>
-nnoremap ,c :s/^/#<CR> /#<CR>
+nnoremap ,c :s/^/#<CR>
 nnoremap ,x :s/^#//<CR>
 
+vnoremap { y:s/<C-R>0/\{<C-R>0}<CR>
+vnoremap ( y:s/<C-R>0/(<C-R>0)<CR>
+vnoremap ' y:s/<C-R>0/'<C-R>0'<CR>
+vnoremap " y:s/<C-R>0/"<C-R>0"<CR>
+
+nmap <S-J> <C-W><C-J>
+nmap <S-K> <C-W><C-K>
+nmap <S-L> <C-W><C-L>
+nmap <S-H> <C-W><C-H>
 
 
 noremap : ;
@@ -45,6 +48,8 @@ set hidden
 set cul
 set incsearch
 set hlsearch
+set statusline+=%F
+
 
 
 
@@ -63,7 +68,6 @@ noremap <Left> <NOP>
 noremap <Right> <NOP>
 
 vnoremap // y/<C-R>"<CR>
-vnoremap /, /[;,]<CR>y/<C-R>"<CR>
 
 nnoremap <Leader>b :ls<CR>:b<Space>
 nnoremap <Tab> :bn<CR>
@@ -84,7 +88,7 @@ function! AutoSaveSession()
   endif
 endfunction
 
-au VimLeave * :call AutoSaveSession()
+au VimLeave *Â :call AutoSaveSession()
 
 function! AutoLoadSession()
 "loads a session if it exists
@@ -95,6 +99,25 @@ endfunction
 
 au VimEnter * :call AutoLoadSession()
 
+
+set rtp+=C:\CustomSoftware
+
+"Setting up fzf
+"Install plugin manager: copy plug.vim to autoload in install dir
+"Copy fzf.exe to vimplugins directory [created in home folder]
+"run :PlugInstall
+"
+
+call plug#begin('C:\CustomSoftware\Vim\plugged')
+"Plug 'C:/CustomSoftware/Vim/plugged'
+
+Plug 'junegunn/fzf', { 'dir': 'C:\CustomSoftware\Vim\plugged\.fzf', 'do': './install --all' }
+"Plug '/usr/local/opt/fzf'
+"Plug 'junegunn/fzf.vim'
+"Plug 'mattn/emnet-vim'
+call plug#end()
+
+noremap f :FZF<CR>
 
 
 set diffexpr=MyDiff()
