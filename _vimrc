@@ -12,7 +12,6 @@ set guioptions-=L  "remove left-hand scroll bar
 set guifont=Hack
 
 
-inoremap kj <Esc>
 
 nnoremap <C-J> <C-F>
 nnoremap <C-K> <C-B>
@@ -33,8 +32,10 @@ nmap <S-L> <C-W><C-L>
 nmap <S-H> <C-W><C-H>
 
 
-noremap : ;
-noremap ; :
+"noremap : ;
+"noremap ; :
+"inoremap kj <Esc>
+
 set relativenumber
 set nu
 
@@ -49,8 +50,8 @@ set cul
 set incsearch
 set hlsearch
 set statusline+=%F
-
-
+"set spell spelllang=en_us
+"set foldmethod=syntax
 
 
 :au FocusLost * silent! wa
@@ -75,32 +76,9 @@ nnoremap ,<Tab> :b#<CR>
 
 set wildchar=<Tab> wildmenu wildmode=full
 
+autocmd BufWinLeave *.* mkview
+autocmd BufWinEnter *.* silent loadview 
 
-"save folds,marks to sessions
-:set sessionoptions+=folds
-:set viminfo='1000,f1
-
-function! AutoSaveSession()
-"saves a session if it exists "**Does not work need to save session manually**
-  if (filereadable("session.vim"))
-    exe "mks! " . "session.vim"
-    echo 'Session saved'
-  endif
-endfunction
-
-au VimLeave * :call AutoSaveSession()
-
-function! AutoLoadSession()
-"loads a session if it exists
-  if (filereadable("session.vim"))
-    exe 'source session.vim'
-  endif
-endfunction
-
-au VimEnter * :call AutoLoadSession()
-
-
-set rtp+=C:\CustomSoftware
 
 "Setting up fzf
 "Install plugin manager: copy plug.vim to autoload in install dir
@@ -108,16 +86,25 @@ set rtp+=C:\CustomSoftware
 "run :PlugInstall
 "
 
+set rtp+=C:\CustomSoftware
+
 call plug#begin('C:\CustomSoftware\Vim\plugged')
-"Plug 'C:/CustomSoftware/Vim/plugged'
 
 Plug 'junegunn/fzf', { 'dir': 'C:\CustomSoftware\Vim\plugged\.fzf', 'do': './install --all' }
-"Plug '/usr/local/opt/fzf'
-"Plug 'junegunn/fzf.vim'
-"Plug 'mattn/emnet-vim'
+Plug 'pangloss/vim-javascript'
+Plug 'mattn/emmet-vim'
+"Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.cmd'}
 call plug#end()
 
 noremap f :FZF<CR>
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 
 set diffexpr=MyDiff()
